@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useCallback, useState } from 'react';
 
 const API_ENDPOINT = 'http://localhost:8000';
 
@@ -14,6 +14,9 @@ const useHttpRequest = ({
     const [error, setError] = useState(null);
 
     const makeRequest = useCallback(async (data) => {
+        setError(null);
+        let isSuccess = true;
+
         // Data Validation
         if (
             typeof dataValidation === 'function' &&
@@ -46,15 +49,18 @@ const useHttpRequest = ({
             if (response.ok) {
                 onSuccess(json);
             } else {
-                if (onError) onError(error);
-                setError(error);
+                if (onError) onError(json);
+                setError(json);
+                isSuccess = false;
             }
         } catch (error) {
             if (onError) onError(error);
             setError(error);
+            isSuccess = false;
         }
 
         setIsLoading(true);
+        return isSuccess;
     }, [dataValidation, method, onError, onSuccess, options, url]);
 
     return {
