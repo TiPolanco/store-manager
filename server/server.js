@@ -3,6 +3,7 @@ import cookieParser from "cookie-parser";
 
 import authRoutes from "./routes/authRoutes.js";
 import storeRoutes from "./routes/storeRoutes.js";
+import userRoutes from "./routes/userRoutes.js";
 
 const port = process.env.PORT || 3000;
 
@@ -16,6 +17,7 @@ app.use(cookieParser());
 // Configure routes
 authRoutes(app);
 storeRoutes(app);
+userRoutes(app);
 
 app.listen(port, () => {
     console.log(`Server listening on port: ${port}`);
