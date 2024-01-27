@@ -1,5 +1,6 @@
 import express from "express";
 import cookieParser from "cookie-parser";
+import cors from 'cors';
 
 import authRoutes from "./routes/authRoutes.js";
 import storeRoutes from "./routes/storeRoutes.js";
@@ -13,6 +14,12 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded());
 app.use(cookieParser());
+
+// Enable CORS
+app.use("*", cors({
+    origin: 'http://localhost:3000',
+    credentials: true,
+}));
 
 // Configure routes
 authRoutes(app);
