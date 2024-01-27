@@ -1,26 +1,19 @@
 import express from "express";
+import cookieParser from "cookie-parser";
 
-import dbPool from "./database/db.js";
+import authRoutes from "./routes/authRoutes.js";
 
 const port = process.env.PORT || 3000;
 
 const app = express();
 
-// Accpect json data
+// Parse information from request
 app.use(express.json());
+app.use(express.urlencoded());
+app.use(cookieParser());
 
-app.get("/", (req, res) => {
-    res.json('Welcome to the Meta-Shops');
-});
-
-app.get("/users", async (req, res) => {
-    try {
-        const { rows } = await dbPool.query('SELECT * FROM public."User"');
-        res.json(rows);
-    } catch (err) {
-        res.status(500).json(err);
-    }
-});
+// Configure routes
+authRoutes(app);
 
 app.listen(port, () => {
     console.log(`Server listening on port: ${port}`);
