@@ -18,13 +18,13 @@ const useHttpRequest = ({
         let isSuccess = true;
 
         // Data Validation
-        if (
-            typeof dataValidation === 'function' &&
-            !dataValidation(data)
-        ) {
-            const validationError = new Error('Invalid data.');
-            if (onError) onError(validationError);
-            setError(validationError);
+        const validationError = typeof dataValidation === 'function'
+            ? dataValidation(data)
+            : '';
+        if (validationError) {
+            if (onError) onError({ message: validationError });
+            setError({ message: validationError });
+            return false;
         }
 
         setIsLoading(true);
