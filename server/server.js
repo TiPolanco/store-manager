@@ -5,7 +5,7 @@ import authRoutes from "./routes/authRoutes.js";
 import storeRoutes from "./routes/storeRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 8000;
 
 const app = express();
 
