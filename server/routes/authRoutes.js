@@ -46,7 +46,7 @@ export default function(app) {
         try {
             const { rows: existingUsers } = await dbPool.query(`
                 SELECT username FROM public."User"
-                    WHERE username = ${username}
+                    WHERE username = '${username}'
             `);
 
             if (existingUsers.length) {
