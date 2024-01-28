@@ -1,9 +1,9 @@
 import dbPool from '../database/db.js';
 import auth from '../middleware/auth.js';
 import permission, {
+    BID_ACCEPT,
     BID_CREATE,
     BID_VIEW,
-    BOOKING_ACCEPT,
     STORE_CREATE,
     STORE_EDIT,
 } from '../middleware/permission.js';
@@ -54,16 +54,16 @@ export default function(app) {
 
     // Remove a store
     // Requires STORE_EDIT permission
-    app.delete(`${BASE_ROUTE}/:storeId`, auth, permission(STORE_EDIT), (req, res) => {
+    app.delete(`${BASE_ROUTE}/:storeId`, auth, permission(STORE_EDIT), async (req, res) => {
         const storeID = req.params.storeId;
 
         try {
-            dbPool.query(`
+            const { rows: newStores } = await dbPool.query(`
                 UPDATE public."Store" SET active = false
                     WHERE id = ${storeID} AND active = true
                     RETURNING id, name, "desc"
             `);
-            res.sendStatus(202);
+            res.sendStatus(202).json(newStores[0]);
         } catch (err) {
             res.status(500).json(err);
         }
@@ -84,49 +84,6 @@ export default function(app) {
             `);
             res.json(rows);
         } catch (err) {
-            res.status(500).json(err);
-        }
-    });
-    
-    // Create new booking from bids
-    // Requires BOOKING_ACCEPT permission
-    app.post(`${BASE_ROUTE}/bookings`, auth, permission(BOOKING_ACCEPT), async (req, res) => {
-        const { startDate, endDate, desc, storeID, userID } = req.body;
-
-        console.log({
-            startDate: typeof startDate,
-        })
-
-        try {
-            const { rows: users } = await dbPool.query(`
-                SELECT name, pfp FROM public."User" WHERE id = '${userID}' AND active = true
-            `);
-            if (!users.length) res.status(400).json({ message: `User id ${userID} does not exist.` });
-            
-            const { rows: stores } = await dbPool.query(`
-                SELECT name FROM public."Store" WHERE id = '${storeID}' AND active = true
-            `);
-            if (!stores.length) res.status(400).json({ message: `Store id ${storeID} does not exist.` });
-            console.log('QA: newBookings', users, stores);
-
-            const { rows: newBookings } = await dbPool.query(`
-                INSERT INTO public."Bookings"(
-                    store_id, user_id, "desc", start_date, end_date, active, "timestamp")
-                    VALUES ($1, $2, $3, $4, $5, $6, to_timestamp(${Date.now()} / 1000.0))
-                    RETURNING id, store_id, user_id, "desc", start_date, end_date, "timestamp"
-            `, [storeID, userID, desc, startDate, endDate, true]);
-            console.log('QA: newBookings', newBookings);
-
-            const data = {
-                ...newBookings[0],
-                pfp: users[0].pfp,
-                store_name: stores[0].name,
-                user_name: users[0].name,
-            }
-    
-            res.status(201).json(data);
-        } catch (err) {
-            console.log('QA: error', err);
             res.status(500).json(err);
         }
     });
@@ -174,6 +131,52 @@ export default function(app) {
             `, [storeID, userID, desc, message, startDate, endDate, true]);
     
             res.status(201).json(newBids[0]);
+        } catch (err) {
+            console.log('QA: error', err);
+            res.status(500).json(err);
+        }
+    });
+
+    // Create new booking from bid
+    // Requires BID_ACCEPT permission
+    app.put(`${BASE_ROUTE}/bids`, auth, permission(BID_ACCEPT), async (req, res) => {
+        const { bidID } = req.body;
+
+        try {
+            const { rows: updatedBids } = await dbPool.query(`
+                UPDATE public."Biddings" SET active = false
+                    WHERE id = ${bidID} AND active = true
+                    RETURNING store_id, user_id, "desc", start_date, end_date
+            `);
+            if (!updatedBids.length) res.status(400).json({ message: `Bid is not found.` });
+            const { user_id, store_id, desc, start_date, end_date } = updatedBids[0];
+
+            const { rows: users } = await dbPool.query(`
+                SELECT name, pfp FROM public."User" WHERE id = '${user_id}' AND active = true
+            `);
+            if (!users.length) res.status(400).json({ message: `User id ${user_id} does not exist.` });
+            
+            const { rows: stores } = await dbPool.query(`
+                SELECT name FROM public."Store" WHERE id = '${store_id}' AND active = true
+            `);
+            if (!stores.length) res.status(400).json({ message: `Store id ${store_id} does not exist.` });
+
+            const { rows: newBookings } = await dbPool.query(`
+                INSERT INTO public."Bookings"(
+                    store_id, user_id, "desc", start_date, end_date, active, "timestamp")
+                    VALUES ($1, $2, $3, $4, $5, $6, to_timestamp(${Date.now()} / 1000.0))
+                    RETURNING id, store_id, user_id, "desc", start_date, end_date, "timestamp"
+            `, [store_id, user_id, desc, start_date, end_date, true]);
+            console.log('QA: newBookings', newBookings);
+
+            const data = {
+                ...newBookings[0],
+                pfp: users[0].pfp,
+                store_name: stores[0].name,
+                user_name: users[0].name,
+            }
+    
+            res.status(201).json(data);
         } catch (err) {
             console.log('QA: error', err);
             res.status(500).json(err);
