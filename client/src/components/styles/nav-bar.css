@@ -1,0 +1,25 @@
+.nav-bar-container {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    line-height: 50px;
+}
+
+.nav-bar-container a {
+    text-decoration: none;
+}
+
+.nav-bar-container .right-btn-group {
+    display: flex;
+}
+
+/* .nav-bar-container .right-btn-group a {
+    line-height: 50px;
+} */
+
+.nav-bar-container .profile-pic {
+    width: 50px;
+    height: 50px;
+    margin-left: 8px;
+}

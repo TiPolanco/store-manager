@@ -2,6 +2,8 @@ import { useCallback, useEffect, useState } from 'react';
 
 import { useUserAuth } from '../hooks/useUserAuth.js';
 
+import './styles/login.css';
+
 const SIGNUP_FIELDS = [
     { name: 'name', label: 'Name' },
     { name: 'username', label: 'Username' },
@@ -14,7 +16,7 @@ const LOGIN_FIELDS = [
     { name: 'password', label: 'Password', type: 'password' },
 ];
 
-const Signup = () => {
+const Login = () => {
     const [isSignup, setIsSignup] = useState(false);
     const [formData, setFormData] = useState({});
     const [errorMessage, setErrorMessage] = useState('');
@@ -98,4 +100,4 @@ const Signup = () => {
     );
 };
 
-export default Signup;
+export default Login;

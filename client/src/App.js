@@ -1,16 +1,21 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './App.css';
 
-import Auth from './components/Auth.js';
+import Login from './components/Login.js';
+import NavBar from './components/NavBar.js';
+import StoreDetail from './components/StoreDetail.js';
+import StoreList from './components/StoreList.js';
 
 function App() {
   return (
     <div className="App">
       <BrowserRouter>
-        <div>This is the Navbar</div>
+        <NavBar />
         <div className='content'>
           <Routes>
-            <Route path='/' element={<Auth />} />
+            <Route path='/' element={<StoreList />} />
+            <Route path='/login' element={<Login />} />
+            <Route path='/store/:storeID' element={<StoreDetail />} />
           </Routes>
         </div>
         
