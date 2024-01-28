@@ -21,6 +21,8 @@ export const useDataContext = () => {
     const setUsers = useCallback((users) => dataDispatch({ type: 'USER.SET', payload: users }), []);
     const removeUser = useCallback((userID) => dataDispatch({ type: 'USER.REMOVE', payload: userID }), []);
 
+    const setBids = useCallback((bids) => dataDispatch({ type: 'BID.SET', payload: bids }), []);
+
     const setLoaded = useCallback(() => dataDispatch({ type: 'LOADED.SET' }), []);
 
     return {

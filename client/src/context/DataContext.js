@@ -39,6 +39,11 @@ export const dataReducer = (state, action) => {
                 ...state,
                 users: state.users.filter((user) => user.id !== Number(action.payload)),
             };
+        case 'BID.SET':
+            return {
+                ...state,
+                bids: action.payload,
+            };
         case 'LOADED.SET':
             return {
                 ...state,
@@ -51,6 +56,7 @@ export const dataReducer = (state, action) => {
 
 export const DataProvider = ({ children }) => {
     const [state, dataDispatch] = useReducer(dataReducer, {
+        bids: [],
         bookings: [],
         isLoaded: false,
         stores: [],
