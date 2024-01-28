@@ -22,14 +22,14 @@ const UserList = () => {
         const userBookings = bookings.filter(booking => booking.user_id === userID);
         
         return (
-            <div className="render-bookings-container">
+            <div className="renter-bookings-container">
                 {!userBookings.length && (
-                    <div className="render-booking-item">
+                    <div className="renter-booking-item">
                         No Bookings
                     </div>
                 )}
                 {userBookings.map(({ id, store_name, start_date, end_date }) => (
-                    <div className="render-booking-item" key={id}>
+                    <div className="renter-booking-item" key={id}>
                         Booked { store_name } from { renderDate(start_date) } to { renderDate(end_date) }
                     </div>
                 ))}
