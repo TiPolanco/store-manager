@@ -15,6 +15,7 @@ const useHttpRequest = ({
 
     const makeRequest = useCallback(async (data) => {
         setError(null);
+        const isDelete = method === 'DELETE';
         let isSuccess = true;
 
         // Data Validation
@@ -36,21 +37,24 @@ const useHttpRequest = ({
             method,
             ...(options || {}),
         };
-        if (data) {
+        if (!isDelete && data) {
             requestOptions.body = JSON.stringify(data);
         }
 
         try {
             // Make request
-            const response = await fetch(`${API_ENDPOINT}${url}`, requestOptions);
-            const json = await response.json();
+            const requestUrl = isDelete
+                ? `${API_ENDPOINT}${url}/${data}`
+                : `${API_ENDPOINT}${url}`;
+            const response = await fetch(requestUrl, requestOptions);
+            const responseData = isDelete ? data : await response.json();
 
             // Handle response
             if (response.ok) {
-                onSuccess(json);
+                onSuccess(responseData);
             } else {
-                if (onError) onError(json);
-                setError(json);
+                if (onError) onError(responseData);
+                setError(responseData);
                 isSuccess = false;
             }
         } catch (error) {
