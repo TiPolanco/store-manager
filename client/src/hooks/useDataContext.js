@@ -31,6 +31,7 @@ export const useDataContext = () => {
         addStore,
         removeStore,
         removeUser,
+        setBids,
         setBookings,
         setLoaded,
         setStores,

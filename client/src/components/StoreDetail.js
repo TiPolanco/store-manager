@@ -7,6 +7,8 @@ import { useStoreManager } from '../hooks/useStoreManager.js';
 import { useUserAuth } from '../hooks/useUserAuth.js';
 import { useBidManager } from '../hooks/useBidManager.js';
 
+import BidList from './BidList.js';
+
 import './styles/store-detail.css';
 
 const StoreDetail = () => {
@@ -14,7 +16,7 @@ const StoreDetail = () => {
     const [isBooking, setIsBooking] = useState(false);
     const [message, setMessage] = useState('');
     const { storeID } = useParams();
-    const { stores, getBookingsFromStoreID, deleteStore, createBookings } = useStoreManager();
+    const { stores, getBookingsFromStoreID, deleteStore } = useStoreManager();
     const { createBid } = useBidManager();
     const { isLoggedIn, isAdmin, user } = useUserAuth();
 
@@ -168,7 +170,9 @@ const StoreDetail = () => {
                     </div>
                 )
             }
-            
+            <AuthWrapper requiredRoles={[1]}>
+                <BidList />
+            </AuthWrapper>
         </div>
     )
 };
