@@ -8,14 +8,16 @@ export const USER_VIEW = "user:view";
 export const USER_EDIT = "user:edit";
 
 export const BOOKING_VIEW = "booking:view";
-export const BOOKING_CREATE = "booking:create";
 export const BOOKING_ACCEPT = "booking:accept";
+
+export const BID_VIEW = "bid:view";
+export const BID_CREATE = "bid:create";
 
 export const ADMIN_ROLE = 1;
 export const BUSINESS_OWNER_ROLE = 2;
 
-const businessOwnerPermissionSet = [STORE_VIEW, BOOKING_VIEW, BOOKING_CREATE];
-const adminPermissionSet = [...businessOwnerPermissionSet, STORE_CREATE, STORE_EDIT, USER_VIEW, USER_EDIT, BOOKING_ACCEPT];
+const businessOwnerPermissionSet = [STORE_VIEW, BOOKING_VIEW, BID_CREATE];
+const adminPermissionSet = [...businessOwnerPermissionSet, STORE_CREATE, STORE_EDIT, USER_VIEW, USER_EDIT, BID_VIEW, BOOKING_ACCEPT];
 
 const PERMISSION_SET_BY_ROLE = {
     [ADMIN_ROLE]: adminPermissionSet,

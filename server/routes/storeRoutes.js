@@ -1,10 +1,19 @@
 import dbPool from '../database/db.js';
 import auth from '../middleware/auth.js';
-import permission, { BOOKING_CREATE, STORE_CREATE, STORE_EDIT } from '../middleware/permission.js';
+import permission, {
+    BID_CREATE,
+    BID_VIEW,
+    BOOKING_ACCEPT,
+    STORE_CREATE,
+    STORE_EDIT,
+} from '../middleware/permission.js';
 
 const BASE_ROUTE = "/api/stores";
 
 export default function(app) {
+    /***********************************************************************
+     * STORE
+     ***********************************************************************/
     // List all active stores
     // Accessible to everyone
     app.get(BASE_ROUTE, async (req, res) => {
@@ -60,7 +69,9 @@ export default function(app) {
         }
     });
 
-    // Bookings
+    /***********************************************************************
+     * BOOKINGS
+     ***********************************************************************/
     // List all active bookings
     // Accessible to everyone
     app.get(`${BASE_ROUTE}/bookings`, async (req, res) => {
@@ -77,9 +88,9 @@ export default function(app) {
         }
     });
     
-    // Create new booking
-    // Requires STORE_CREATE permission
-    app.post(`${BASE_ROUTE}/bookings`, auth, permission(BOOKING_CREATE), async (req, res) => {
+    // Create new booking from bids
+    // Requires BOOKING_ACCEPT permission
+    app.post(`${BASE_ROUTE}/bookings`, auth, permission(BOOKING_ACCEPT), async (req, res) => {
         const { startDate, endDate, desc, storeID, userID } = req.body;
 
         console.log({
@@ -120,4 +131,52 @@ export default function(app) {
         }
     });
 
+    /***********************************************************************
+     * BIDDINGS
+     ***********************************************************************/
+    // List all active bookings
+    // Requires BID_VIEW permission
+    app.get(`${BASE_ROUTE}/bids`, auth, permission(BID_VIEW), async (req, res) => {
+        try {
+            const { rows } = await dbPool.query(`
+                SELECT public."Biddings".id, store_id, user_id, public."Biddings".desc, public."Biddings".message, start_date, end_date, public."User".name AS user_name, public."User".pfp, public."Store".name AS store_name, public."Biddings".timestamp
+                    FROM (public."Biddings" INNER JOIN public."Store" ON public."Biddings".store_id = public."Store".id) INNER JOIN public."User" on public."User".id = public."Biddings".user_id
+                    WHERE public."Biddings".active = true AND public."Store".active = true AND public."User".active = true AND end_date > NOW() 
+                    ORDER BY public."Biddings".start_date ASC
+            `);
+            res.json(rows);
+        } catch (err) {
+            res.status(500).json(err);
+        }
+    });
+    
+    // Create new booking
+    // Requires STORE_CREATE permission
+    app.post(`${BASE_ROUTE}/bids`, auth, permission(BID_CREATE), async (req, res) => {
+        const { startDate, endDate, desc, message, storeID, userID } = req.body;
+
+        try {
+            const { rows: userResults } = await dbPool.query(`
+                SELECT EXISTS (SELECT id FROM public."User" WHERE id = ${userID} and active = true)
+            `);
+            if (!userResults.length || !userResults[0].exists) res.status(400).json({ message: `User id ${userID} does not exist.` });
+            
+            const { rows: storeResults } = await dbPool.query(`
+                SELECT EXISTS (SELECT id FROM public."Store" WHERE id = ${storeID} and active = true)
+            `);
+            if (!storeResults.length || !storeResults[0].exists) res.status(400).json({ message: `Store id ${storeID} does not exist.` });
+
+            const { rows: newBids } = await dbPool.query(`
+                INSERT INTO public."Biddings"(
+                    store_id, user_id, "desc", message, start_date, end_date, active, "timestamp")
+                    VALUES ($1, $2, $3, $4, $5, $6, $7, to_timestamp(${Date.now()} / 1000.0))
+                    RETURNING id, store_id, user_id, "desc", message, start_date, end_date, "timestamp"
+            `, [storeID, userID, desc, message, startDate, endDate, true]);
+    
+            res.status(201).json(newBids[0]);
+        } catch (err) {
+            console.log('QA: error', err);
+            res.status(500).json(err);
+        }
+    });
 };
