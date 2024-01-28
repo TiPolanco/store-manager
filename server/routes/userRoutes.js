@@ -1,14 +1,15 @@
 import dbPool from '../database/db.js';
 import auth from '../middleware/auth.js';
-import permission, { USER_EDIT } from '../middleware/permission.js';
+import permission, { USER_EDIT, USER_VIEW } from '../middleware/permission.js';
 
 const BASE_ROUTE = "/api/users";
 
 export default function(app) {
     // List all users
-    app.get(BASE_ROUTE, async (req, res) => {
+    // Requires USER_VIEW permission
+    app.get(BASE_ROUTE, auth, permission(USER_VIEW), async (req, res) => {
         try {
-            const { rows } = await dbPool.query('SELECT * FROM public."User"');
+            const { rows } = await dbPool.query('SELECT * FROM public."User" WHERE active = true AND role > 1');
             res.json(rows);
         } catch (err) {
             res.status(500).json(err);

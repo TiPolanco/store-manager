@@ -3,6 +3,8 @@ import jwt from 'jsonwebtoken';
 import dbPool from '../database/db.js';
 import auth from '../middleware/auth.js';
 
+import { BUSINESS_OWNER_ROLE } from '../middleware/permission.js'
+
 export default function(app) {
     // Login
     app.post("/api/login", async (req, res) => {
@@ -60,7 +62,7 @@ export default function(app) {
                     name, username, password, role, pfp)
                     VALUES ($1, $2, $3, $4, $5)
                     RETURNING id, name, role, pfp;
-            `, [name, username, password, 2, pfp]);
+            `, [name, username, password, BUSINESS_OWNER_ROLE, pfp]);
 
             const newUser = newUsers[0];
 
