@@ -1,10 +1,11 @@
 import { useCallback, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
+import AuthWrapper from '../utils/AuthWrapper.js';
+import { renderDate } from '../utils/data-format-helpers.js';
 import { useStoreManager } from '../hooks/useStoreManager.js';
 import { useUserAuth } from '../hooks/useUserAuth.js';
-import { renderDate } from '../utils/data-format-helpers.js';
-import AuthWrapper from '../utils/AuthWrapper.js';
+import { useBidManager } from '../hooks/useBidManager.js';
 
 import './styles/store-detail.css';
 
@@ -14,6 +15,7 @@ const StoreDetail = () => {
     const [message, setMessage] = useState('');
     const { storeID } = useParams();
     const { stores, getBookingsFromStoreID, deleteStore, createBookings } = useStoreManager();
+    const { createBid } = useBidManager();
     const { isLoggedIn, isAdmin, user } = useUserAuth();
 
     const store = stores.find(({ id }) => id === Number(storeID));
@@ -42,11 +44,11 @@ const StoreDetail = () => {
         setMessage('');
     }, []);
 
-    const submitBooking = async (e) => {
+    const submitBid = async (e) => {
         e.preventDefault();
         if (!isLoggedIn) return;
 
-        const isSuccess = await createBookings({
+        const isSuccess = await createBid({
             ...formData,
             userID: user?.id,
             storeID: Number(storeID),
@@ -54,7 +56,7 @@ const StoreDetail = () => {
 
         if (isSuccess) {
             setFormData({});
-            setMessage('Booking successfully submitted!');
+            setMessage('Application submitted successfully!');
         }
     };
 
@@ -91,10 +93,10 @@ const StoreDetail = () => {
                 <div>No Bookings for this store.</div>
             )
 
-    const renderNewBooking = () => (
+    const renderNewBid = () => (
         <div className="booking-form-container">
-            <form className="booking-form" onSubmit={submitBooking}>
-                <h4>Book Store</h4>
+            <form className="booking-form" onSubmit={submitBid}>
+                <h4>Apply for {store?.name || store}</h4>
 
                 {message && <p>{message}</p>}
                 {!message && (
@@ -122,6 +124,13 @@ const StoreDetail = () => {
                                 onChange={handleChange}
                             />
                         </div>
+                        <div className="booking-form-input-group">
+                            <label>Message to the store manager</label>
+                            <textarea
+                                name="message"
+                                onChange={handleChange}
+                            />
+                        </div>
                     </>
                 )}
 
@@ -144,13 +153,13 @@ const StoreDetail = () => {
                     Booking Schedules
                 </div>
                 <div className="store-bookings-btn">
-                    {isLoggedIn && !isBooking && <button onClick={toggleIsBooking}>New Booking</button>}
+                    {isLoggedIn && !isBooking && <button onClick={toggleIsBooking}>Apply</button>}
                 </div>
             </div>
             {isBooking
                 ? (
                     <div className="store-detail-booking">
-                        {renderNewBooking()}
+                        {renderNewBid()}
                     </div>
                 )
                 : (
