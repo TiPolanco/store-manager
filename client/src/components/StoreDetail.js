@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import { useStoreManager } from '../hooks/useStoreManager.js';
 import { useUserAuth } from '../hooks/useUserAuth.js';
 import { renderDate } from '../utils/data-format-helpers.js';
+import AuthWrapper from '../utils/AuthWrapper.js';
 
 import './styles/store-detail.css';
 
@@ -61,7 +62,9 @@ const StoreDetail = () => {
         <>
             <h3>#{storeID} - {store.name}</h3>
             <p>{store.desc}</p>
-            {isAdmin && (<button onClick={removeStore}>Delete</button>)}
+            <AuthWrapper requiredRoles={[1]}>
+                <button onClick={removeStore}>Delete</button>
+            </AuthWrapper>
         </>
     );
 

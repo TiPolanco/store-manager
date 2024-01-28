@@ -2,13 +2,12 @@ import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { useStoreManager } from '../hooks/useStoreManager.js';
-import { useUserAuth } from '../hooks/useUserAuth.js';
+import AuthWrapper from '../utils/AuthWrapper.js';
 
 const StoreList = () => {
     const [formData, setFormData] = useState({});
     const [isCreate, setIsCreate] = useState(false);
     const navigate = useNavigate();
-    const { isAdmin } = useUserAuth();
     const {
         createStore,
         error,
@@ -40,47 +39,48 @@ const StoreList = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        // Access Control
-        if (!isAdmin) return;
-
         const isSuccess = await createStore(formData);
         if (isSuccess) setFormData({});
     };
 
     const renderCreationForm = () => (
-        <div className="store-creation-form-container">
-            <form className="store-creation-form" onSubmit={handleSubmit}>
-                <h4>Create Store</h4>
-                <div className="store-creation-form-input-group">
-                    <label>Name</label>
-                    <input
-                        name="name"
-                        onChange={handleChange}
-                        type="text"
-                        value={formData.name}
-                    />
-                </div>
-                <div className="store-creation-form-input-group">
-                    <label>Description</label>
-                    <input
-                        name="desc"
-                        onChange={handleChange}
-                        type="text"
-                        value={formData.desc}
-                    />
-                </div>
+        <AuthWrapper  requiredRoles={[1]}>
+            <div className="store-creation-form-container">
+                <form className="store-creation-form" onSubmit={handleSubmit}>
+                    <h4>Create Store</h4>
+                    <div className="store-creation-form-input-group">
+                        <label>Name</label>
+                        <input
+                            name="name"
+                            onChange={handleChange}
+                            type="text"
+                            value={formData.name}
+                        />
+                    </div>
+                    <div className="store-creation-form-input-group">
+                        <label>Description</label>
+                        <input
+                            name="desc"
+                            onChange={handleChange}
+                            type="text"
+                            value={formData.desc}
+                        />
+                    </div>
 
-                <p>{error?.message}</p>
+                    <p>{error?.message}</p>
 
-                <button onClick={toggleCreate}>Back</button>
-                <button type="submit">Create</button>
-            </form>
-        </div>
+                    <button onClick={toggleCreate}>Back</button>
+                    <button type="submit">Create</button>
+                </form>
+            </div>
+        </AuthWrapper>
     );
 
     const renderStores = () => (
         <div className="store-list-container">
-            {isAdmin && (<button onClick={toggleCreate}>Create Store</button>)}
+            <AuthWrapper  requiredRoles={[1]}>
+                <button onClick={toggleCreate}>Create Store</button>
+            </AuthWrapper>
             {stores.map(({ id, name, desc }) => (
                 <div
                     className="store-item-container"
