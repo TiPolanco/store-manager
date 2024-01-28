@@ -1,11 +1,33 @@
-import { useCallback, useState } from 'react';
+import { useEffect, useCallback, useState } from 'react';
 
 import useHttpRequest from './useHttpRequest.js';
+import { useDataContext } from './useDataContext.js';
 
 export const useStoreManager = () => {
-    const [stores, setStores] = useState([]);
     const [error, setError] = useState(null);
+    const {
+        addBooking,
+        addStore,
+        bookings,
+        isLoaded,
+        removeStore,
+        setBookings,
+        setLoaded,
+        setStores,
+        stores,
+        users,
+    } = useDataContext();
 
+    useEffect(() => {
+        // Initial Data Fetch
+        if (!isLoaded) {
+            setLoaded();
+            fetchStores();
+            fetchBookings();
+        }
+    }, []);
+
+    // Stores
     const { makeRequest: fetchStores, isLoading: isFetchingStores } = useHttpRequest({
         onError: setError,
         onSuccess: setStores,
@@ -20,24 +42,54 @@ export const useStoreManager = () => {
         return null;
     }, []);
 
-    const insertNewStore = useCallback((newStore) => {
-        setStores((existingStores) => [newStore, ...existingStores]);
-    }, []);
-
-    const { makeRequest: createStore, isLoading: isCreatingStores } = useHttpRequest({
+    const { makeRequest: createStore, isLoading: isCreatingStore } = useHttpRequest({
         dataValidation: validateStore,
         method: 'POST',
         onError: setError,
-        onSuccess: insertNewStore,
+        onSuccess: addStore,
+        url: '/api/stores',
+    });
+    
+    const { makeRequest: deleteStore, isLoading: isDeletingStore } = useHttpRequest({
+        method: 'DELETE',
+        onError: setError,
+        onSuccess: removeStore,
         url: '/api/stores',
     });
 
+    // Bookings
+    const { makeRequest: fetchBookings, isLoading: isFetchingBookings } = useHttpRequest({
+        onError: setError,
+        onSuccess: setBookings,
+        url: '/api/stores/bookings',
+    });
+
+    const getBookingsFromStoreID = useCallback((storeID) =>
+        bookings.filter(booking => booking.store_id === Number(storeID))
+    , [bookings]);
+
+    const { makeRequest: createBookings, isLoading: isCreatingBookings } = useHttpRequest({
+        method: 'POST',
+        onError: setError,
+        onSuccess: addBooking,
+        url: '/api/stores/bookings',
+    });
+
     return {
+        bookings,
+        createBookings,
         createStore,
+        deleteStore,
         error,
+        fetchBookings,
         fetchStores,
-        isCreatingStores,
+        getBookingsFromStoreID,
+        isCreatingBookings,
+        isCreatingStore,
+        isDeletingStore,
+        isFetchingBookings,
         isFetchingStores,
         stores,
+        users,
     };
 };
