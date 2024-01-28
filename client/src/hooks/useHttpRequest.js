@@ -59,7 +59,7 @@ const useHttpRequest = ({
             isSuccess = false;
         }
 
-        setIsLoading(true);
+        setIsLoading(false);
         return isSuccess;
     }, [dataValidation, method, onError, onSuccess, options, url]);
 
