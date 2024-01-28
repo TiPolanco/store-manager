@@ -51,7 +51,7 @@ const useHttpRequest = ({
 
             // Handle response
             if (response.ok) {
-                onSuccess(responseData);
+                if (onSuccess) onSuccess(responseData);
             } else {
                 if (onError) onError(responseData);
                 setError(responseData);
