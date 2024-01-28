@@ -15,7 +15,6 @@ export const useStoreManager = () => {
         setLoaded,
         setStores,
         stores,
-        users,
     } = useDataContext();
 
     useEffect(() => {
@@ -90,6 +89,5 @@ export const useStoreManager = () => {
         isFetchingBookings,
         isFetchingStores,
         stores,
-        users,
     };
 };
