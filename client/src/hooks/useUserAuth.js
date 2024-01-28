@@ -11,6 +11,10 @@ export const useUserAuth = () => {
     const [error, setError] = useState(null);
     const { user, dispatch } = useAuthContext();
 
+    const userRole = user?.role;
+    const isLoggedIn = Boolean(userRole);
+    const isAdmin = userRole === 1;
+
     const handleUserAuth = useCallback((user) => {
         // Save user to localstorage
         localStorage.setItem('user', JSON.stringify(user));
@@ -73,10 +77,13 @@ export const useUserAuth = () => {
 
     return {
         error,
+        isAdmin,
         isLoading: isLoggingIn || isSigningUp,
+        isLoggedIn,
         login,
         logout,
         signup,
         user,
+        userRole,
     };
 };
