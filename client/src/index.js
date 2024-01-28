@@ -4,12 +4,15 @@ import './index.css';
 import App from './App';
 
 import { AuthProvider } from './context/AuthContext.js';
+import { DataProvider } from './context/DataContext.js';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <AuthProvider>
-      <App />
+      <DataProvider>
+        <App />
+      </DataProvider>
     </AuthProvider>
   </React.StrictMode>
 );
