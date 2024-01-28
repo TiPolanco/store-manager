@@ -8,7 +8,7 @@ const StoreList = () => {
     const [formData, setFormData] = useState({});
     const [isCreate, setIsCreate] = useState(false);
     const navigate = useNavigate();
-    const { user } = useUserAuth();
+    const { isAdmin } = useUserAuth();
     const {
         createStore,
         error,
@@ -16,7 +16,6 @@ const StoreList = () => {
         isFetchingStores,
         stores,
     } = useStoreManager();
-    const isCreationAllowed = user?.role === 1;
 
     const handleStoreClick = (storeID) => {
         navigate(`/store/${storeID}`);
@@ -42,7 +41,7 @@ const StoreList = () => {
         e.preventDefault();
 
         // Access Control
-        if (!isCreationAllowed) return;
+        if (!isAdmin) return;
 
         const isSuccess = await createStore(formData);
         if (isSuccess) setFormData({});
@@ -81,7 +80,7 @@ const StoreList = () => {
 
     const renderStores = () => (
         <div className="store-list-container">
-            {isCreationAllowed && (<button onClick={toggleCreate}>Create Store</button>)}
+            {isAdmin && (<button onClick={toggleCreate}>Create Store</button>)}
             {stores.map(({ id, name, desc }) => (
                 <div
                     className="store-item-container"
