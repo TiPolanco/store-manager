@@ -12,19 +12,13 @@ const StoreList = () => {
     const {
         createStore,
         error,
-        fetchStores,
         isCreatingStores,
         isFetchingStores,
         stores,
     } = useStoreManager();
     const isCreationAllowed = user?.role === 1;
 
-    useEffect(() => {
-        fetchStores();
-    }, []);
-
     const handleStoreClick = (storeID) => {
-        console.log('QA: click', storeID);
         navigate(`/store/${storeID}`);
     };
 
