@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 import { useStoreManager } from '../hooks/useStoreManager.js';
 import { useUserAuth } from '../hooks/useUserAuth.js';
@@ -10,13 +9,8 @@ import './styles/user-list.css';
 
 const UserList = () => {
     const { isAdmin } = useUserAuth();
-    const navigate = useNavigate();
     const { bookings } = useStoreManager();
     const { users, banUser, isFetchingUsers } = useUserManager();
-
-    useEffect(() => {
-        if (!isAdmin) navigate('/login');
-    }, [isAdmin]);
 
     const removeUser = useCallback((userID) => {
         if (!isAdmin) return;

@@ -3,6 +3,7 @@ import './App.css';
 
 import Login from './components/Login.js';
 import NavBar from './components/NavBar.js';
+import PrivateRoutes from './utils/PrivateRoutes.js';
 import StoreDetail from './components/StoreDetail.js';
 import StoreList from './components/StoreList.js';
 import UserList from './components/UserList.js';
@@ -17,7 +18,9 @@ function App() {
             <Route path='/' element={<StoreList />} />
             <Route path='/login' element={<Login />} />
             <Route path='/store/:storeID' element={<StoreDetail />} />
-            <Route path='/users' element={<UserList />} />
+            <Route element={<PrivateRoutes />} >
+              <Route path='/users' element={<UserList />} />
+            </Route>
           </Routes>
         </div>
         
