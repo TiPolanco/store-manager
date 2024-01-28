@@ -37,7 +37,7 @@ export const dataReducer = (state, action) => {
         case 'USER.REMOVE':
             return {
                 ...state,
-                users: state.users.filter((user) => user.id !== action.payload.id),
+                users: state.users.filter((user) => user.id !== Number(action.payload)),
             };
         case 'LOADED.SET':
             return {

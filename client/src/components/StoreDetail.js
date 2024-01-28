@@ -3,10 +3,9 @@ import { useParams } from 'react-router-dom';
 
 import { useStoreManager } from '../hooks/useStoreManager.js';
 import { useUserAuth } from '../hooks/useUserAuth.js';
+import { renderDate } from '../utils/data-format-helpers.js';
 
 import './styles/store-detail.css';
-
-const renderDate = (dateString) => new Date(dateString).toLocaleDateString();
 
 const StoreDetail = () => {
     const [formData, setFormData] = useState({});

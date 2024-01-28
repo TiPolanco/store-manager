@@ -1,0 +1,15 @@
+
+
+.user-item-container {
+    border: 1px solid black;
+    margin: 20px;
+    display: grid;
+    grid-template-columns: 40% 60%;
+    padding: 12px;
+}
+
+.user-item-container .profile-pic {
+    width: 40px;
+    height: 40px;
+    margin: auto;
+}

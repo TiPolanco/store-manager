@@ -19,7 +19,7 @@ export const useDataContext = () => {
     const addBooking = useCallback((booking) => dataDispatch({ type: 'BOOKING.ADD', payload: booking }), []);
 
     const setUsers = useCallback((users) => dataDispatch({ type: 'USER.SET', payload: users }), []);
-    const removeUser = useCallback((user) => dataDispatch({ type: 'USER.REMOVE', payload: user }), []);
+    const removeUser = useCallback((userID) => dataDispatch({ type: 'USER.REMOVE', payload: userID }), []);
 
     const setLoaded = useCallback(() => dataDispatch({ type: 'LOADED.SET' }), []);
 

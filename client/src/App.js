@@ -5,6 +5,7 @@ import Login from './components/Login.js';
 import NavBar from './components/NavBar.js';
 import StoreDetail from './components/StoreDetail.js';
 import StoreList from './components/StoreList.js';
+import UserList from './components/UserList.js';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
             <Route path='/' element={<StoreList />} />
             <Route path='/login' element={<Login />} />
             <Route path='/store/:storeID' element={<StoreDetail />} />
+            <Route path='/users' element={<UserList />} />
           </Routes>
         </div>
         
