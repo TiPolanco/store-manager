@@ -38,7 +38,7 @@ const MMDatePicker = ({ storeID, setFormData, startDate = null, endDate = null, 
 
     return (
         <div className="form-input-group">
-            <label>Select Date Range</label>
+            <label>Date Range</label>
             <DatePicker
                 endDate={endDate}
                 excludeDates={excludeDates}

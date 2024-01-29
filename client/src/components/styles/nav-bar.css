@@ -24,6 +24,7 @@
 
 .nav-bar-logo-container {
     display: flex;
+    font-size: 44px;
 }
 
 .nav-bar-logo.logo {

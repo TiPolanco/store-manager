@@ -58,7 +58,8 @@ const UserList = () => {
             >
                 <div className="user-content">
                     <div className={`profile-pic ${pfp}`} />
-                    <h4>{name} <span>{username}</span></h4>
+                    <h4>{name}</h4>
+                    <span>{username}</span>
                 </div>
                 {renderBookingsForUserID(id)}
                 <button className="primary" onClick={() => handleDeleteClick({ id, name })}>Ban</button>

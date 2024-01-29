@@ -1,6 +1,8 @@
 .App {
   text-align: center;
   color: #2c1f23;
+  font-family: 'Orbitron', sans-serif;
+  font-family: 'Sixtyfour', sans-serif;
 }
 
 .App > .content {
@@ -89,7 +91,7 @@
   width: fit-content;
   margin: auto;
   padding: 20px;
-  background-color: antiquewhite;
+  background-color: #e5e0db;
 }
 
 .form-input-group {
