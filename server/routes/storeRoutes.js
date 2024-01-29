@@ -132,7 +132,6 @@ export default function(app) {
     
             return res.status(201).json(newBids[0]);
         } catch (err) {
-            console.log('QA: error', err);
             return res.status(500).json(err);
         }
     });

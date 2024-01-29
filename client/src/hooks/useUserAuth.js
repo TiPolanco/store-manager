@@ -35,7 +35,6 @@ export const useUserAuth = () => {
     }, []);
 
     const validateLogin = useCallback((data) => {
-        console.log('QA: validate login', data)
         if (!data) return 'No data submitted';
         if (!data.username) return 'username is required.';
         if (!USERNAME_REGEX.test(data.username)) return 'username should only contain letters, numbers, . and _, and be 5 to 20 characters long.';
