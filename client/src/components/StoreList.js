@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import { useStoreManager } from '../hooks/useStoreManager.js';
 import AuthWrapper from '../utils/AuthWrapper.js';
 
+import Loader from './Loader.js';
+
 import './styles/store-list.css'
 
 const StoreList = () => {
@@ -42,7 +44,11 @@ const StoreList = () => {
         e.preventDefault();
 
         const isSuccess = await createStore(formData);
-        if (isSuccess) setFormData({});
+
+        if (isSuccess) {
+            setFormData({});
+            setIsCreate(false);
+        }
     };
 
     const renderCreationForm = () => (
@@ -97,7 +103,7 @@ const StoreList = () => {
     return (
         <div className="store-view-container">
             {
-                (isFetchingStores || isCreatingStores) && 'Loading...'
+                (isFetchingStores || isCreatingStores) && <Loader />
             }
             <div className="store-list-header-container" style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <div className="store-list-header">

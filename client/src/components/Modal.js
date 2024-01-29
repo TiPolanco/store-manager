@@ -1,5 +1,7 @@
 import { useState } from 'react';
 
+import Loader from './Loader.js';
+
 import './styles/modal.css';
 
 const Modal = ({
@@ -26,7 +28,7 @@ const Modal = ({
     return (
         <div className="mm-modal-bg">
             <div className={`mm-modal ${classname}`}>
-                {isLoading && 'Loading...'}
+                {isLoading && <Loader />}
                 <h2>{title}</h2>
                 { children }
                 <div className="mm-modal-btn-group">

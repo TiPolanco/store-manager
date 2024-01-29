@@ -6,6 +6,7 @@ import { renderDate } from '../utils/data-format-helpers.js';
 import { useBidManager } from '../hooks/useBidManager.js';
 
 import Modal from './Modal.js';
+import Loader from './Loader.js';
 
 import './styles/bid-list.css';
 
@@ -81,7 +82,7 @@ const BidList = ({ storeID }) => {
                     Pending Applications
                 </div>
             </div>
-            {isFetchingBids && 'Loading...'}
+            {isFetchingBids && <Loader />}
             {renderStoreBookings()}
             <Modal
                 action={handleAccept}

@@ -6,6 +6,7 @@ import { renderDate } from '../utils/data-format-helpers.js';
 import { useUserManager } from '../hooks/useUserManager.js';
 
 import Modal from './Modal.js';
+import Loader from './Loader.js';
 
 import './styles/user-list.css';
 
@@ -60,14 +61,14 @@ const UserList = () => {
                     <h4>{name} <span>{username}</span></h4>
                 </div>
                 {renderBookingsForUserID(id)}
-                <button lassnam onClick={() => handleDeleteClick({ id, name })}>Ban</button>
+                <button className="primary" onClick={() => handleDeleteClick({ id, name })}>Ban</button>
             </div>
         ));
 
     return (
         <div className="user-view-container">
             {
-                isFetchingUsers && 'Loading...'
+                isFetchingUsers && <Loader />
             }
             <div className="user-list-container">
                 {renderUsers()}
