@@ -63,7 +63,7 @@ export default function(app) {
                     WHERE id = ${storeID} AND active = true
                     RETURNING id, name, "desc"
             `);
-            return res.sendStatus(202).json(newStores[0]);
+            return res.status(202).json(newStores[0]);
         } catch (err) {
             return res.status(500).json(err);
         }
