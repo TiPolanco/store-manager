@@ -40,14 +40,15 @@ const MMDatePicker = ({ storeID, setFormData, startDate = null, endDate = null, 
         <div className="form-input-group">
             <label>Select Date Range</label>
             <DatePicker
+                endDate={endDate}
+                excludeDates={excludeDates}
+                isClearable
+                maxDate={maxDate}
+                minDate={addDays(new Date(), 1)}
+                onChange={handleChange}
+                selectsDisabledDaysInRange
                 selectsRange={true}
                 startDate={startDate}
-                endDate={endDate}
-                onChange={handleChange}
-                excludeDates={excludeDates}
-                minDate={addDays(new Date(), 1)}
-                maxDate={maxDate}
-                selectsDisabledDaysInRange
                 withPortal
             />
         </div>
