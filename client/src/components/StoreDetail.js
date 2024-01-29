@@ -9,12 +9,14 @@ import { useBidManager } from '../hooks/useBidManager.js';
 
 import BidList from './BidList.js';
 import MMDatePicker from './DatePicker.js';
+import Modal from './Modal.js';
 
 import './styles/store-detail.css';
 
 const StoreDetail = () => {
     const [formData, setFormData] = useState({});
     const [isBooking, setIsBooking] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const [message, setMessage] = useState('');
     const { storeID } = useParams();
     const { stores, getBookingsFromStoreID, deleteStore } = useStoreManager();
@@ -23,6 +25,10 @@ const StoreDetail = () => {
 
     const store = stores.find(({ id }) => id === Number(storeID));
     const storeBookings = getBookingsFromStoreID(storeID);
+
+    const toggleModal = useCallback(() => {
+        setIsModalOpen(prev => !prev);
+    }, []);
 
     const removeStore = useCallback(() => {
         if (!isAdmin) return;
@@ -70,7 +76,7 @@ const StoreDetail = () => {
                 <h3>{store.name}</h3>
                 <p>{store.desc}</p>
                 <AuthWrapper requiredRoles={[1]}>
-                    <button className="secondary" onClick={removeStore}>Delete</button>
+                    <button className="secondary" onClick={toggleModal}>Delete</button>
                 </AuthWrapper>
             </div>
         </>
@@ -172,6 +178,17 @@ const StoreDetail = () => {
             <AuthWrapper requiredRoles={[1]}>
                 <BidList storeID={storeID} />
             </AuthWrapper>
+            <Modal
+                action={removeStore}
+                classname="delete-store-modal"
+                onCancel={toggleModal}
+                onComplete={toggleModal}
+                title="Delete Store"
+                isOpen={isModalOpen}
+            >
+                <p>{`About to delete store ${store?.name} with ${storeBookings.length ? storeBookings.length : 'no'} bookings.`}</p>
+                <p>Are you sure?</p>
+            </Modal>
         </div>
     )
 };
