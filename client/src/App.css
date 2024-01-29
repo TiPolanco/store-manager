@@ -101,6 +101,9 @@
   display: block;
   text-align: left;
 }
+.form-input-group input {
+  height: 30px;
+}
 .form-input-group input,
 .form-input-group textarea {
   width: 100%;
@@ -109,4 +112,5 @@
 .form-btn-group {
   display: flex;
   column-gap: 8px;
+  justify-content: center;
 }
