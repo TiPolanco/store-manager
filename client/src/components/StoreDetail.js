@@ -64,29 +64,32 @@ const StoreDetail = () => {
 
     const renderStoreDetail = () => (
         <>
-            <h3>#{storeID} - {store.name}</h3>
-            <p>{store.desc}</p>
-            <AuthWrapper requiredRoles={[1]}>
-                <button onClick={removeStore}>Delete</button>
-            </AuthWrapper>
+            <div className="mm-image store" />
+            <div className="store-display-content">
+                <h3>{store.name}</h3>
+                <p>{store.desc}</p>
+                <AuthWrapper requiredRoles={[1]}>
+                    <button className="secondary" onClick={removeStore}>Delete</button>
+                </AuthWrapper>
+            </div>
         </>
     );
 
     const renderStoreBookings = () =>
         storeBookings.length
             ? storeBookings.map((booking) => {
-                const { id, pfp, user_name, user_id, start_date, end_date, timestamp, desc } = booking;
+                const { id, pfp = 'punk', user_name, user_id, start_date, end_date, timestamp, desc } = booking;
                 const isOwnBooking = user_id === user?.id;
                 const isCancelable = isOwnBooking && (new Date(start_date) > Date.now());
                 return (
                     <div className="booking-card-container" key={id}>
-                        <div className="profile-pic one" />
+                        <div className={`profile-pic ${pfp}`} />
                         <div className="booking-content">
-                            <p>Booked by: {user_name}</p>
-                            <p>From {renderDate(start_date)} to {renderDate(end_date)}</p>
-                            <p>{desc}</p>
-                            {isOwnBooking && <p>Confirmed at: {renderDate(timestamp)}</p>}
-                            {isCancelable && <p>If you which to cancel, please contact the support team.</p>}
+                            <h2>{desc}</h2>
+                            <p style={{ fontStyle: 'italic' }}><strong>From {renderDate(start_date)} to {renderDate(end_date)}</strong></p>
+                            <p>Operated by: {isOwnBooking ? 'You' : user_name}</p>
+                            {isOwnBooking && <p style={{ fontSize: '13px' }}>Confirmed at: {renderDate(timestamp)}</p>}
+                            {isCancelable && <p style={{ fontSize: '13px' }}>If you which to cancel, please contact the support team.</p>}
                         </div>
                     </div>
                 )
@@ -103,7 +106,7 @@ const StoreDetail = () => {
                 {message && <p>{message}</p>}
                 {!message && (
                     <>
-                        <div className="booking-form-input-group">
+                        <div className="form-input-group">
                             <label>Start Date</label>
                             <input
                                 name="startDate"
@@ -111,7 +114,7 @@ const StoreDetail = () => {
                                 type="date"
                             />
                         </div>
-                        <div className="booking-form-input-group">
+                        <div className="form-input-group">
                             <label>End Date</label>
                             <input
                                 name="endDate"
@@ -119,14 +122,14 @@ const StoreDetail = () => {
                                 type="date"
                             />
                         </div>
-                        <div className="booking-form-input-group">
+                        <div className="form-input-group">
                             <label>Description</label>
                             <textarea
                                 name="desc"
                                 onChange={handleChange}
                             />
                         </div>
-                        <div className="booking-form-input-group">
+                        <div className="form-input-group">
                             <label>Message to the store manager</label>
                             <textarea
                                 name="message"
@@ -136,8 +139,8 @@ const StoreDetail = () => {
                     </>
                 )}
 
-                <button onClick={toggleIsBooking}>{message ? 'Back' : 'Cancel'}</button>
-                {!message && <button type="submit">Submit</button>}
+                <button className="secondary" onClick={toggleIsBooking}>{message ? 'Back' : 'Cancel'}</button>
+                {!message && <button className="primary" type="submit">Submit</button>}
             </form>
         </div>
     );
@@ -152,10 +155,10 @@ const StoreDetail = () => {
             </div>
             <div className="store-bookings-container" style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <div className="store-bookings-header">
-                    Booking Schedules
+                    Store Schedule
                 </div>
                 <div className="store-bookings-btn">
-                    {isLoggedIn && !isBooking && <button onClick={toggleIsBooking}>Apply</button>}
+                    {isLoggedIn && !isBooking && <button className="primary" onClick={toggleIsBooking}>Apply</button>}
                 </div>
             </div>
             {isBooking
@@ -171,7 +174,7 @@ const StoreDetail = () => {
                 )
             }
             <AuthWrapper requiredRoles={[1]}>
-                <BidList />
+                <BidList storeID={storeID} />
             </AuthWrapper>
         </div>
     )

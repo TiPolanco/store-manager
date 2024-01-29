@@ -20,48 +20,40 @@ const UserList = () => {
 
     const renderBookingsForUserID = (userID) => {
         const userBookings = bookings.filter(booking => booking.user_id === userID);
+        const bookingCount = userBookings.length;
         
         return (
-            <div className="renter-bookings-container">
-                {!userBookings.length && (
-                    <div className="renter-booking-item">
-                        No Bookings
-                    </div>
-                )}
-                {userBookings.map(({ id, store_name, start_date, end_date }) => (
-                    <div className="renter-booking-item" key={id}>
-                        Booked { store_name } from { renderDate(start_date) } to { renderDate(end_date) }
-                    </div>
-                ))}
+            <div className="user-bookings-container">
+                <div className={`user-booking-item ${bookingCount === 0 ? 'empty' : ''}`}>
+                    {bookingCount === 0 ? 'No Booking' : `${bookingCount} booking${bookingCount > 1 ? 's' : ''}`}
+                </div>
             </div>
         )
     }
 
-    const renderUsers = () => (
-        <div className="user-list-container">
-            {users.map(({ id, name, username, pfp }) => (
-                <div
-                    className="user-item-container"
-                    key={id}
-                >
-                    <div className="user-content">
-                        <div className="profile-pic one" />
-                        <h4>{name}</h4>
-                        <p>{username}</p>
-                        <button onClick={() => removeUser(id)}>Ban this user</button>
-                    </div>
-                    {renderBookingsForUserID(id)}
+    const renderUsers = () =>
+        users.map(({ id, name, username, pfp = 'punk' }) => (
+            <div
+                className="user-item-container"
+                key={id}
+            >
+                <div className="user-content">
+                    <div className={`profile-pic ${pfp}`} />
+                    <h4>{name} <span>{username}</span></h4>
                 </div>
-            ))}
-        </div>
-    );
+                {renderBookingsForUserID(id)}
+                <button lassnam onClick={() => removeUser(id)}>Ban</button>
+            </div>
+        ));
 
     return (
         <div className="user-view-container">
             {
                 isFetchingUsers && 'Loading...'
             }
-            {renderUsers()}
+            <div className="user-list-container">
+                {renderUsers()}
+            </div>
         </div>
     );
 };

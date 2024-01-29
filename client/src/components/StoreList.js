@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import { useStoreManager } from '../hooks/useStoreManager.js';
 import AuthWrapper from '../utils/AuthWrapper.js';
 
+import './styles/store-list.css'
+
 const StoreList = () => {
     const [formData, setFormData] = useState({});
     const [isCreate, setIsCreate] = useState(false);
@@ -48,29 +50,29 @@ const StoreList = () => {
             <div className="store-creation-form-container">
                 <form className="store-creation-form" onSubmit={handleSubmit}>
                     <h4>Create Store</h4>
-                    <div className="store-creation-form-input-group">
+                    <div className="form-input-group">
                         <label>Name</label>
                         <input
                             name="name"
                             onChange={handleChange}
                             type="text"
-                            value={formData.name}
                         />
                     </div>
-                    <div className="store-creation-form-input-group">
+                    <div className="form-input-group">
                         <label>Description</label>
                         <input
                             name="desc"
                             onChange={handleChange}
                             type="text"
-                            value={formData.desc}
                         />
                     </div>
 
                     <p>{error?.message}</p>
 
-                    <button onClick={toggleCreate}>Back</button>
-                    <button type="submit">Create</button>
+                    <div className="form-btn-group">
+                        <button className="secondary" onClick={toggleCreate}>Back</button>
+                        <button className="primary" type="submit">Create</button>
+                    </div>
                 </form>
             </div>
         </AuthWrapper>
@@ -78,16 +80,13 @@ const StoreList = () => {
 
     const renderStores = () => (
         <div className="store-list-container">
-            <AuthWrapper  requiredRoles={[1]}>
-                <button onClick={toggleCreate}>Create Store</button>
-            </AuthWrapper>
             {stores.map(({ id, name, desc }) => (
                 <div
                     className="store-item-container"
                     key={id}
-                    style={{ border: '1px solid black', margin: '20px' }}
                     onClick={() => handleStoreClick(id)}
                 >
+                    <div className="mm-image store" />
                     <h4>{name}</h4>
                     <p>{desc}</p>
                 </div>
@@ -100,6 +99,16 @@ const StoreList = () => {
             {
                 (isFetchingStores || isCreatingStores) && 'Loading...'
             }
+            <div className="store-list-header-container" style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <div className="store-list-header">
+                    Stores
+                </div>
+                <div className="store-list-btn">
+                    <AuthWrapper  requiredRoles={[1]}>
+                        <button className="secondary" onClick={toggleCreate}>Create Store</button>
+                    </AuthWrapper>
+                </div>
+            </div>
             {isCreate
                 ? renderCreationForm()
                 : renderStores()

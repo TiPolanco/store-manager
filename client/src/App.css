@@ -1,5 +1,6 @@
 .App {
   text-align: center;
+  color: #2c1f23;
 }
 
 .App > .content {
@@ -13,4 +14,99 @@
 
 .profile-pic.one {
   background-image: url('https://i.seadn.io/gae/BdxvLseXcfl57BiuQcQYdJ64v-aI8din7WPk0Pgo3qQFhAUH-B6i-dCqqc_mCkRIzULmwzwecnohLhrcH8A9mpWIZqA7ygc52Sr81hE');
+}
+.profile-pic.punk {
+  background-image: url('https://i.seadn.io/gae/BdxvLseXcfl57BiuQcQYdJ64v-aI8din7WPk0Pgo3qQFhAUH-B6i-dCqqc_mCkRIzULmwzwecnohLhrcH8A9mpWIZqA7ygc52Sr81hE');
+}
+.profile-pic.ape-1 {
+  background-image: url('https://www.christies.com/img/LotImages/2021/HGK/2021_HGK_20909_0015_000(yuga_labs_bored_ape_yacht_club_1401112050).jpg');
+}
+.profile-pic.ape-2 {
+  background-image: url('https://watcher.guru/news/wp-content/uploads/2021/08/unnamed.png');
+}
+.profile-pic.ape-3 {
+  background-image: url('https://i.pinimg.com/originals/b3/6e/87/b36e8757bc644d71865afceb19e070c7.png');
+}
+.profile-pic.azuki-1 {
+  background-image: url('https://nft-scout.com/wp-content/uploads/2022/03/the-cheapest-azuki.webp');
+}
+.profile-pic.azuki-2 {
+  background-image: url('https://d2ysb8zhbqya7e.cloudfront.net/10058/10058_1153_pr.png');
+}
+.profile-pic.beanz-1 {
+  background-image: url('https://nftevening.com/wp-content/uploads/2022/04/Gus.jpg');
+}
+.profile-pic.doodles-1 {
+  background-image: url('https://nftcalendar.io/storage/uploads/news/2023/3/k6vrgXcuA2YTj552rAOUpEIgeDEvY0CtoixxAdBN.png');
+}
+.profile-pic.doodles-2 {
+  background-image: url('https://i.seadn.io/gcs/files/41dd30a40b020a59dd16b43c7711ac37.png');
+}
+.profile-pic.coolcat-1 {
+  background-image: url('https://raw.seadn.io/files/687c46e025b73cfc7728dbf76333de76.png');
+}
+
+.logo {
+  /* background-image: url('https://st2.depositphotos.com/54959856/48804/v/450/depositphotos_488042242-stock-illustration-initial-logo-design-shield-style.jpg'); */
+  background-image: url('https://banner2.cleanpng.com/20180425/dde/kisspng-concert-t-shirt-marilyn-manson-rock-is-dead-tour-g-5ae147a227b195.4601478515247133781626.jpg');
+}
+
+.icon {background-size: contain;}
+.icon.store { background-image: url('../public/house.png'); }
+.icon.user { background-image: url('../public/real-estate.png'); }
+.icon.more { background-image: url('../public/delivery.png'); }
+.icon.rent { background-image: url('../public/rent.png'); }
+
+.mm-image.store {
+  background-image: url('https://img.freepik.com/free-vector/shop-with-sign-we-are-open_52683-38687.jpg');
+  background-size: cover;
+}
+
+.App button {
+  font-size: 21px;
+  padding: 8px 34px;
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+.App button.primary {
+  background-color: #2c1f23;
+  border-color: #2c1f23;
+  color: white;
+}
+.App button.primary:hover {
+  background-color: #442f35;
+  border-color: #442f35;
+}
+.App button.secondary {
+  background-color: white;
+}
+.App button.secondary:hover {
+  background-color: rgb(200, 200, 200);
+}
+
+.App form {
+  width: fit-content;
+  margin: auto;
+  padding: 20px;
+  background-color: antiquewhite;
+}
+
+.form-input-group {
+  width: 250px;
+  margin: 0 auto 12px;
+}
+
+.form-input-group label {
+  display: block;
+  text-align: left;
+}
+.form-input-group input,
+.form-input-group textarea {
+  width: 100%;
+}
+
+.form-btn-group {
+  display: flex;
+  column-gap: 8px;
 }

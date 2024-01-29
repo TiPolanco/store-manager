@@ -1,0 +1,23 @@
+.pdp-selector-container {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 20% 20% 20% 20% 20%;
+    grid-row-gap: 8px;
+}
+
+.pdp-selector-container .profile-pic {
+    width: 40px;
+    height: 40px;
+    opacity: 0.5;
+}
+
+.pdp-selector-container .profile-pic.selected {
+    opacity: 1;
+}
+
+.user-auth-form .profile-display .profile-pic {
+    width: 200px;
+    height: 200px;
+    border-radius: 8px;
+    margin: auto;
+}

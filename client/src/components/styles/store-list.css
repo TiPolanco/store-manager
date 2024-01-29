@@ -1,0 +1,36 @@
+.store-list-header-container {
+    display: flex;
+    justify-content: space-between;
+    width: 90vw;
+    margin: auto;
+    max-width: 800px;
+}
+.store-list-header {
+    font-size: 25px;
+    line-height: 44px;
+}
+
+.store-list-container {
+    display: grid;
+    grid-template-columns: 33% 33% 33%;
+    width: 90vh;
+    max-width: 800px;
+    margin: auto;
+}
+
+.store-item-container {
+    margin: 20px;
+    text-align: left;
+    padding: 8px;
+    border-radius: 5px;
+}
+
+.store-item-container:hover {
+    background-color: #f6f6f6;
+    cursor: pointer;
+}
+
+.store-item-container .mm-image.store {
+    width: 100%;
+    height: 148px;
+}

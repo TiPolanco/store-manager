@@ -1,15 +1,39 @@
-
+.user-list-container {
+    display: grid;
+    grid-template-columns: 33% 33% 33%;
+    width: 90vh;
+    max-width: 800px;
+    margin: auto;
+}
 
 .user-item-container {
     border: 1px solid black;
     margin: 20px;
-    display: grid;
-    grid-template-columns: 40% 60%;
     padding: 12px;
+    text-align: left;
+    border-radius: 3px;
+}
+.user-item-container button {
+    width: 100%;
+}
+.user-item-container h4 {
+    margin-bottom: 8px;
+}
+.user-item-container h4 > span {
+    font-size: 13px;
+    color: rgb(128 128 128);
 }
 
 .user-item-container .profile-pic {
-    width: 40px;
-    height: 40px;
-    margin: auto;
+    width: 200px;
+    height: 200px;
+    border-radius: 8px;
+}
+
+.user-bookings-container {
+    margin: 8px 0;
+}
+
+.user-booking-item.empty {
+    color: rgb(196, 196, 196);
 }

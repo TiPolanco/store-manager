@@ -16,9 +16,11 @@ const LOGIN_FIELDS = [
     { name: 'password', label: 'Password', type: 'password' },
 ];
 
+const PFPS = ['punk', 'ape-1', 'ape-2', 'ape-3', 'azuki-1', 'azuki-2', 'beanz-1', 'doodles-1', 'doodles-2', 'coolcat-1'];
+
 const Login = () => {
     const [isSignup, setIsSignup] = useState(false);
-    const [formData, setFormData] = useState({});
+    const [formData, setFormData] = useState({ pfp: PFPS[Math.floor(Math.random() * 10)] });
     const [errorMessage, setErrorMessage] = useState('');
     const { error: authError, login, logout, signup, user } = useUserAuth();
 
@@ -44,6 +46,13 @@ const Login = () => {
         }));
     }, []);
 
+    const selectPFP = (pfp) => {
+        setFormData((prevData) => ({
+            ...prevData,
+            pfp,
+        }));
+    }
+
     const toggleSignup = useCallback((e) => {
         e.preventDefault();
 
@@ -67,35 +76,57 @@ const Login = () => {
         <form className='user-auth-form' onSubmit={handleSubmit}>
             <h4>Welcome to the Greatest Metaverse Mall</h4>
             { user && (
-                <div>Logged in as: {user.name}</div>
+                <div className="profile-display">
+                    <div className={`profile-pic ${user.pfp}`} />
+                    <div>Logged in as: {user.name}</div>
+                    <div>{user.role === 1 ? 'Admin' : 'Business'} User</div>
+                </div>
             )}
             {!user && (isSignup ? SIGNUP_FIELDS : LOGIN_FIELDS).map(({ name, label, type, defaultValue = '' }) => (
-                <div key={name}>
+                <div className="form-input-group" key={name}>
                     <label>{label}</label>
-                    <input
-                        name={name}
-                        onChange={handleChange}
-                        type={type || 'text'}
-                        value={formData[name] || defaultValue}
-                    />
+                    {name !== 'pfp'
+                        ? (
+                            <input
+                                name={name}
+                                onChange={handleChange}
+                                type={type || 'text'}
+                                value={formData[name] || defaultValue}
+                            />
+                        )
+                        : (
+                            <div className="pdp-selector-container">
+                                {PFPS.map((pfp) => (
+                                    <div
+                                        key={pfp}
+                                        onClick={() => selectPFP(pfp)}
+                                        className={`profile-pic ${pfp} ${formData.pfp === pfp ? 'selected' : ''}`}
+                                    />
+                                ))}
+                            </div>
+                        )
+                    }
+                    
                 </div>
             ))}
 
             <p>{errorMessage}</p>
 
-            {user
-                ? <button onClick={handleLogout}>Log out</button>
-                : (
-                    <>
-                        <button onClick={toggleSignup}>
-                            { isSignup ? 'Back to login' : 'Sign up' }
-                        </button>
-                        <button type="submit">
-                            { isSignup ? 'Sign up' : 'Log in' }
-                        </button>
-                    </>
-                )
-            }
+            <div className="form-btn-group">
+                {user
+                    ? <button onClick={handleLogout}>Log out</button>
+                    : (
+                        <>
+                            <button className='secondary' onClick={toggleSignup}>
+                                { isSignup ? 'Back' : 'Sign up' }
+                            </button>
+                            <button className="primary" type="submit">
+                                { isSignup ? 'Sign up' : 'Log in' }
+                            </button>
+                        </>
+                    )
+                }
+            </div>
         </form>
     );
 };
