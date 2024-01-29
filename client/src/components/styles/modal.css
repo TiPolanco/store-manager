@@ -1,0 +1,26 @@
+.mm-modal-bg {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    left: 0;
+    top: 0;
+    background-color: #808080c9;
+}
+
+.mm-modal {
+    width: fit-content;
+    padding: 20px;
+    background-color: antiquewhite;
+    left: 50%;
+    top: 50%;
+    position: absolute;
+    transform: translate(-50%, -50%);
+    border-radius: 8px;
+}
+.mm-modal .bid-modal {}
+
+.mm-modal-btn-group {
+    display: flex;
+    column-gap: 8px;
+    justify-content: center;
+}

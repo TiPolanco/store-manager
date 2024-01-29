@@ -1,22 +1,40 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { useStoreManager } from '../hooks/useStoreManager.js';
 import { useUserAuth } from '../hooks/useUserAuth.js';
 import { renderDate } from '../utils/data-format-helpers.js';
 import { useUserManager } from '../hooks/useUserManager.js';
 
+import Modal from './Modal.js';
+
 import './styles/user-list.css';
 
 const UserList = () => {
+    const selectedUser = useRef();
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const { isAdmin } = useUserAuth();
     const { bookings } = useStoreManager();
     const { users, banUser, isFetchingUsers } = useUserManager();
 
-    const removeUser = useCallback((userID) => {
+    const toggleModal = useCallback(() => {
+        setIsModalOpen(prev => !prev);
+    }, []);
+
+    const handleDeleteClick = (user) => {
+        selectedUser.current = user;
+        toggleModal();
+    }
+
+    const removeUser = useCallback(async (userID) => {
         if (!isAdmin) return;
 
-        banUser(userID);
+        return await banUser(userID);
     }, [banUser, isAdmin]);
+
+    const handleRemoveComplete = useCallback(() => {
+        selectedUser.current = null;
+        toggleModal();
+    }, []);
 
     const renderBookingsForUserID = (userID) => {
         const userBookings = bookings.filter(booking => booking.user_id === userID);
@@ -42,7 +60,7 @@ const UserList = () => {
                     <h4>{name} <span>{username}</span></h4>
                 </div>
                 {renderBookingsForUserID(id)}
-                <button lassnam onClick={() => removeUser(id)}>Ban</button>
+                <button lassnam onClick={() => handleDeleteClick({ id, name })}>Ban</button>
             </div>
         ));
 
@@ -54,6 +72,18 @@ const UserList = () => {
             <div className="user-list-container">
                 {renderUsers()}
             </div>
+            <Modal
+                action={removeUser}
+                classname="delete-user-modal"
+                input={selectedUser.current?.id}
+                onCancel={toggleModal}
+                onComplete={toggleModal}
+                title="Ban User"
+                isOpen={isModalOpen}
+            >
+                <p>{`About to ban user ${selectedUser.current?.name}.`}</p>
+                <p>Are you sure?</p>
+            </Modal>
         </div>
     );
 };
