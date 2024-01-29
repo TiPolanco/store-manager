@@ -22,7 +22,17 @@ export const useBidManager = () => {
         addBooking(newBooking);
     }, [fetchBids]);
 
+    const validateBid = useCallback((data) => {
+        if (!data) return 'No data is submitted';
+        if (!data.startDate || !(data.startDate instanceof Date)) return 'Invalid start date';
+        if (!data.endDate || !(data.endDate instanceof Date)) return 'Invalid end date';
+        if (!data.desc || typeof data.desc !== 'string') return 'Invalid store description';
+
+        return null;
+    }, []);
+
     const { makeRequest: createBid, isLoading: isCreatingBid } = useHttpRequest({
+        dataValidation: validateBid,
         method: 'POST',
         onError: setError,
         url: '/api/stores/bids',
