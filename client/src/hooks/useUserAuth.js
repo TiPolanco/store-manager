@@ -24,7 +24,7 @@ export const useUserAuth = () => {
             type: 'LOGIN',
             payload: user,
         });
-    }, []);
+    }, [dispatch]);
 
     const handleLogout = useCallback(() => {
         // Remove user from localstorage
@@ -32,7 +32,7 @@ export const useUserAuth = () => {
 
         // Update AuthContext
         dispatch({ type: 'LOGOUT' });
-    }, []);
+    }, [dispatch]);
 
     const validateLogin = useCallback((data) => {
         if (!data) return 'No data submitted';
@@ -68,7 +68,7 @@ export const useUserAuth = () => {
         url: '/api/signup',
     });
 
-    const { makeRequest: logout, error: logoutError } = useHttpRequest({
+    const { makeRequest: logout } = useHttpRequest({
         onError: setError,
         onSuccess: handleLogout,
         url: '/api/logout',

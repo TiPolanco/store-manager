@@ -6,7 +6,6 @@ import { useDataContext } from './useDataContext.js';
 export const useStoreManager = () => {
     const [error, setError] = useState(null);
     const {
-        addBooking,
         addStore,
         bookings,
         isLoaded,
