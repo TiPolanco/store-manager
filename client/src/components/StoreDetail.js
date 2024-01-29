@@ -8,6 +8,7 @@ import { useUserAuth } from '../hooks/useUserAuth.js';
 import { useBidManager } from '../hooks/useBidManager.js';
 
 import BidList from './BidList.js';
+import MMDatePicker from './DatePicker.js';
 
 import './styles/store-detail.css';
 
@@ -106,27 +107,20 @@ const StoreDetail = () => {
                 {message && <p>{message}</p>}
                 {!message && (
                     <>
-                        <div className="form-input-group">
-                            <label>Start Date</label>
-                            <input
-                                name="startDate"
-                                onChange={handleChange}
-                                type="date"
-                            />
-                        </div>
-                        <div className="form-input-group">
-                            <label>End Date</label>
-                            <input
-                                name="endDate"
-                                onChange={handleChange}
-                                type="date"
-                            />
-                        </div>
+                        <MMDatePicker
+                            storeID={storeID}
+                            setFormData={setFormData}
+                            startDate={formData.startDate}
+                            endDate={formData.endDate}
+                            storeBookings={storeBookings}
+                        />
                         <div className="form-input-group">
                             <label>Description</label>
                             <textarea
                                 name="desc"
                                 onChange={handleChange}
+                                placeholder="Describe your business..."
+                                rows={3}
                             />
                         </div>
                         <div className="form-input-group">
@@ -134,6 +128,8 @@ const StoreDetail = () => {
                             <textarea
                                 name="message"
                                 onChange={handleChange}
+                                placeholder="You change let a message to the store manager..."
+                                rows={5}
                             />
                         </div>
                     </>
