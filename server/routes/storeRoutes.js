@@ -23,9 +23,9 @@ export default function(app) {
                 WHERE active = true
                 ORDER BY id ASC
             `);
-            res.json(rows);
+            return res.json(rows);
         } catch (err) {
-            res.status(500).json(err);
+            return res.status(500).json(err);
         }
     });
 
@@ -46,9 +46,9 @@ export default function(app) {
                     RETURNING id, name, "desc"
             `, [name, desc]);
     
-            res.status(201).json(rows[0]);
+            return res.status(201).json(rows[0]);
         } catch (err) {
-            res.status(500).json(err);
+            return res.status(500).json(err);
         }
     });
 
@@ -63,9 +63,9 @@ export default function(app) {
                     WHERE id = ${storeID} AND active = true
                     RETURNING id, name, "desc"
             `);
-            res.sendStatus(202).json(newStores[0]);
+            return res.sendStatus(202).json(newStores[0]);
         } catch (err) {
-            res.status(500).json(err);
+            return res.status(500).json(err);
         }
     });
 
@@ -82,9 +82,9 @@ export default function(app) {
                     WHERE public."Bookings".active = true AND public."Store".active = true AND public."User".active = true AND end_date > NOW() 
                     ORDER BY public."Bookings".start_date ASC
             `);
-            res.json(rows);
+            return res.json(rows);
         } catch (err) {
-            res.status(500).json(err);
+            return res.status(500).json(err);
         }
     });
 
@@ -101,9 +101,9 @@ export default function(app) {
                     WHERE public."Biddings".active = true AND public."Store".active = true AND public."User".active = true AND end_date > NOW() 
                     ORDER BY public."Biddings".start_date ASC
             `);
-            res.json(rows);
+            return res.json(rows);
         } catch (err) {
-            res.status(500).json(err);
+            return res.status(500).json(err);
         }
     });
     
@@ -116,12 +116,12 @@ export default function(app) {
             const { rows: userResults } = await dbPool.query(`
                 SELECT EXISTS (SELECT id FROM public."User" WHERE id = ${userID} and active = true)
             `);
-            if (!userResults.length || !userResults[0].exists) res.status(400).json({ message: `User id ${userID} does not exist.` });
+            if (!userResults.length || !userResults[0].exists) return res.status(400).json({ message: `User id ${userID} does not exist.` });
             
             const { rows: storeResults } = await dbPool.query(`
                 SELECT EXISTS (SELECT id FROM public."Store" WHERE id = ${storeID} and active = true)
             `);
-            if (!storeResults.length || !storeResults[0].exists) res.status(400).json({ message: `Store id ${storeID} does not exist.` });
+            if (!storeResults.length || !storeResults[0].exists) return res.status(400).json({ message: `Store id ${storeID} does not exist.` });
 
             const { rows: newBids } = await dbPool.query(`
                 INSERT INTO public."Biddings"(
@@ -130,10 +130,10 @@ export default function(app) {
                     RETURNING id, store_id, user_id, "desc", message, start_date, end_date, "timestamp"
             `, [storeID, userID, desc, message, startDate, endDate, true]);
     
-            res.status(201).json(newBids[0]);
+            return res.status(201).json(newBids[0]);
         } catch (err) {
             console.log('QA: error', err);
-            res.status(500).json(err);
+            return res.status(500).json(err);
         }
     });
 
@@ -148,18 +148,18 @@ export default function(app) {
                     WHERE id = ${bidID} AND active = true
                     RETURNING store_id, user_id, "desc", start_date, end_date
             `);
-            if (!updatedBids.length) res.status(400).json({ message: `Bid is not found.` });
+            if (!updatedBids.length) return res.status(400).json({ message: `Bid is not found.` });
             const { user_id, store_id, desc, start_date, end_date } = updatedBids[0];
 
             const { rows: users } = await dbPool.query(`
                 SELECT name, pfp FROM public."User" WHERE id = '${user_id}' AND active = true
             `);
-            if (!users.length) res.status(400).json({ message: `User id ${user_id} does not exist.` });
+            if (!users.length) return res.status(400).json({ message: `User id ${user_id} does not exist.` });
             
             const { rows: stores } = await dbPool.query(`
                 SELECT name FROM public."Store" WHERE id = '${store_id}' AND active = true
             `);
-            if (!stores.length) res.status(400).json({ message: `Store id ${store_id} does not exist.` });
+            if (!stores.length) return res.status(400).json({ message: `Store id ${store_id} does not exist.` });
 
             const { rows: newBookings } = await dbPool.query(`
                 INSERT INTO public."Bookings"(
@@ -167,7 +167,6 @@ export default function(app) {
                     VALUES ($1, $2, $3, $4, $5, $6, to_timestamp(${Date.now()} / 1000.0))
                     RETURNING id, store_id, user_id, "desc", start_date, end_date, "timestamp"
             `, [store_id, user_id, desc, start_date, end_date, true]);
-            console.log('QA: newBookings', newBookings);
 
             const data = {
                 ...newBookings[0],
@@ -176,10 +175,9 @@ export default function(app) {
                 user_name: users[0].name,
             }
     
-            res.status(201).json(data);
+            return res.status(201).json(data);
         } catch (err) {
-            console.log('QA: error', err);
-            res.status(500).json(err);
+            return res.status(500).json(err);
         }
     });
 };
