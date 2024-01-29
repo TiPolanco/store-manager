@@ -1,4 +1,4 @@
-import { useEffect, useCallback, useMemo, useState } from 'react';
+import { useEffect, useCallback, useState } from 'react';
 
 import useHttpRequest from './useHttpRequest.js';
 import { useDataContext } from './useDataContext.js';
@@ -63,7 +63,7 @@ export const useStoreManager = () => {
         url: '/api/stores/bookings',
     });
 
-    const getBookingsFromStoreID = useMemo((storeID) =>
+    const getBookingsFromStoreID = useCallback((storeID) =>
         bookings.filter(booking => booking.store_id === Number(storeID))
     , [bookings]);
 
@@ -75,7 +75,6 @@ export const useStoreManager = () => {
         fetchBookings,
         fetchStores,
         getBookingsFromStoreID,
-        isCreatingBookings,
         isCreatingStore,
         isDeletingStore,
         isFetchingBookings,
