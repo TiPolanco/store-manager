@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-import { useStoreManager } from '../hooks/useStoreManager.js';
-import { useUserAuth } from '../hooks/useUserAuth.js';
+import { getConflicts } from '../utils/bidding-helpers.js';
 import { renderDate } from '../utils/data-format-helpers.js';
 import { useBidManager } from '../hooks/useBidManager.js';
+import { useUserAuth } from '../hooks/useUserAuth.js';
 
 import Modal from './Modal.js';
 import Loader from './Loader.js';
@@ -13,21 +13,12 @@ import './styles/bid-list.css';
 const BidList = ({ storeID }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const { isAdmin } = useUserAuth();
-    const { bookings } = useStoreManager();
     const { bids, fetchBids, isFetchingBids, acceptBid, isLoaded } = useBidManager();
     const selectedBid = useRef();
 
     const bidsForStore = bids.filter((bid) => bid.store_id === Number(storeID));
-    const conflictCount = selectedBid.current
-        ? bidsForStore.reduce((count, bid) => {
-            const { start_date, end_date, id } = bid;
-            const isConflict = id !== selectedBid.current.id && (
-                new Date(start_date) <= new Date(selectedBid.current.start_date) && new Date(selectedBid.current.start_date) <= new Date(end_date) ||
-                new Date(start_date) <= new Date(selectedBid.current.end_date) && new Date(selectedBid.current.end_date) <= new Date(end_date)
-            );
-            return isConflict ? count + 1 : count;
-        }, 0)
-        : 0;
+    const conflictingBids = getConflicts(bids, selectedBid.current);
+    const conflictCount = conflictingBids.length;
 
     useEffect(() => {
         if (isAdmin && !isLoaded) {
