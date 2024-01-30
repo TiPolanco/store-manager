@@ -2,8 +2,8 @@
     display: flex;
     justify-content: space-between;
     width: 90vw;
+    max-width: 1060px;
     margin: auto;
-    max-width: 800px;
 }
 .store-list-header {
     font-size: 25px;
@@ -12,9 +12,9 @@
 
 .store-list-container {
     display: grid;
-    grid-template-columns: 33% 33% 33%;
-    width: 90vh;
-    max-width: 800px;
+    grid-template-columns: 25% 25% 25% 25%;
+    width: 90vw;
+    max-width: 1060px;
     margin: auto;
 }
 
